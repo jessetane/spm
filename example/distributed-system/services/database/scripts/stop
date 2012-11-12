@@ -1,0 +1,14 @@
+#
+# stop
+#
+
+# get script dir
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+DIR="$DIR"/..
+cd "$DIR"
+
+[ ! -e pid ] && echo "Not running!" >&2 && exit 1
+
+# kill whatever is in the pid file
+kill `cat pid`
+rm pid

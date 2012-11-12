@@ -1,0 +1,9 @@
+{
+  "name": "deployer",
+  "description": "Deploy stuff",
+  "version": "0.0.1",
+  "main": "deployer.js",
+  "dependencies": {
+    "cui": "*"
+  }
+}
