@@ -5,6 +5,9 @@ Deploy multiple versions of multiple services to multiple hosts in multiple envi
 
 
 ## TODO:
-* deploy from remote repos
-* overwrite should wipe dir?
-* does overwrite properly pull changes to HEAD?
+* deploy from remote repos like github (deploy keys)
+* support direct input (logon?)
+* send environment variables to bash profile?
+
+# CUI
+* image support node-canvas

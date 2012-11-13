@@ -13,8 +13,9 @@ cd "$DIR"
 npm install
 
 # run the app as a bg process and redirect i/o to a log
-# also record the pid for looking up later
 node database.js >> log 2>&1 &
+
+# record the pid so we can monitor it later
 PID=$!
 ps -p $PID > /dev/null
 STATUS=$?

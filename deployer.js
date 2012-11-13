@@ -7,12 +7,12 @@
 
 
 var fs = require("fs");
+var util = require("util");
 var child_process = require("child_process");
 var exec = child_process.exec;
 var spawn = child_process.spawn;
 var cui = require("cui");
-var cwd = process.cwd();
-var config = require(cwd + "/deploy.js");
+var config = inflateConfig(require(process.cwd() + "/deploy.js"));
 
 
 //
@@ -65,13 +65,11 @@ cui.push({
           cui.push(servicesLive);
           cui.push(versionsLive);
           cui.push(scriptsLive);
-          //cui.push(scriptArgs);
           cui.push(function (cb) {
             var environment = cui.last(4);
             var service = cui.last(3);
             var version = cui.last(2);
             var script = cui.last(1);
-            //var args = cui.last(1);
             command(environment, service, version, script, "", cb);
           });
           break;
@@ -104,11 +102,13 @@ var servicesLive = {
   type: "buttons",
   data: function (cb) {
     var environment = cui.last(1);
-    listDirForEnvironment("", environment, function (err, data) {
+    listDirForEnvironment("", environment, null, function (err, data) {
       if (!err && data.length === 0) {
         err = new Error("No services found on '" + cui.last(1).name + "'");
       }
-      cb(err, data && data.map(serviceByName));
+      cb(err, data && data.map(function (service) {
+        return config.services[service];
+      }));
     });
   }
 };
@@ -133,7 +133,7 @@ var versionsLive = {
   data: function (cb) {
     var environment = cui.last(2);
     var service = cui.last(1);
-    listDirForEnvironment(service.name + "/versions", environment, cb);
+    listDirForEnvironment(service.name + "/versions", environment, service, cb);
   }
 };
 
@@ -164,7 +164,7 @@ var scriptsLive = {
      var service = cui.last(2);
      var version = cui.last(1);
      var scriptsDir = service.scripts || "bin";
-     listDirForEnvironment(service.name + "/versions/" + version + "/" + scriptsDir, environment, cb);
+     listDirForEnvironment(service.name + "/versions/" + version + "/" + scriptsDir, environment, service, cb);
   }
 };
 
@@ -187,7 +187,7 @@ var confirm = {
 //
 
 function logon (host, cb) {
-  var credential = credentialForHost(host);
+  var credential = host.credential;
   expandPath(credential.key, function (err, key) {
     var cmd = "ssh";
     var args = [
@@ -206,9 +206,9 @@ function command (environment, service, version, script, args, cb) {
   script = (args) ? script + " " + args : script;
   var scriptsDir = service.scripts || "bin";
   console.log("Running " + service.name + "@" + version + "/" + scriptsDir + " in '" + environment.name + "'...");
-  forEachHost(environment, function (host, credential, cb) {
+  forEachHost(environment, service, function (host, credential, cb) {
     var home = host.home + "/" + service.name + "/versions/" + version;
-    var vars = envVars(environment);
+    var vars = hostVars(host);
     var cmd = "ssh -o StrictHostKeychecking=no -i " + credential.key + " " + credential.user + "@" + host.name + " '\
     source ~/.bash_profile;\
     cd " + home + ";\
@@ -226,12 +226,12 @@ function command (environment, service, version, script, args, cb) {
 
 function withdraw (environment, service, version, cb) {
   console.log("Withdrawing " + service.name + "@" + version + " from '" + environment.name + "'...");
-  forEachHost(environment, function (host, credential, cb) {
+  forEachHost(environment, service, function (host, credential, cb) {
     var versionDir = host.home + "/" + service.name + "/versions/" + version;
     var serviceDir = host.home + "/" + service.name;
     var cmd = "ssh -o StrictHostKeychecking=no -i " + credential.key + " " + credential.user + "@" + host.name + " '\
     rm -rf " + versionDir + ";\
-    if [ $(ls " + serviceDir + "/versions | wc -l) = 0 ]; then rm -rf " + serviceDir + "; fi;\
+    [ $(ls " + serviceDir + "/versions | wc -l) = 0 ] && rm -rf " + serviceDir + ";\
     '";
     exec(cmd, function (err, data) {
       cb(err, data);
@@ -250,7 +250,7 @@ function deploy (service, version, environment) {
   console.log("Deploying " + service.name + "@" + version + " to '" + environment.name + "'...");
   var sshkeys = [];
   var responses = [];
-  forEachHost(environment, function (host, credential, cb) {
+  forEachHost(environment, service, function (host, credential, cb) {
     sshkeys.push(credential.key);
     deployPrepare(service, version, host, credential, cb);
   }, function (err, data) {
@@ -306,7 +306,7 @@ function deployPrepare (service, version, host, credential, cb) {
 }
 
 function deployUpdate (service, version, host, credential, cb) {
-  var cmd = "cd " + cwd + "/" + service.path + ";\
+  var cmd = "cd " + process.cwd() + "/" + service.path + ";\
   ssh-add " + credential.key + ";\
   git push " + credential.user + "@" + host.name + ":" + host.home + "/" + service.name +"/repo --all;\
   git push " + credential.user + "@" + host.name + ":" + host.home + "/" + service.name +"/repo --tags;\
@@ -343,68 +343,110 @@ function deployInstall (service, version, host, credential, cb) {
 //  helpers
 //
 
+function inflateConfig (config) {
+  // services - just add name
+  var services = config.services;
+  Object.keys(services).forEach(function (sname) {
+    services[sname].name = sname;
+  });
+  
+  // credentials - just add name
+  var credentials = config.credentials;
+  Object.keys(credentials).forEach(function (cname) {
+    credentials[cname].name = cname;
+  });
+  
+  // environments - just add name
+  var environments = config.environments;
+  Object.keys(environments).forEach(function (ename) {
+    var env = environments[ename];
+    env.name = ename;
+    
+    // hosts - add name, credential, variables and services pointers
+    var hosts = env.hosts;
+    Object.keys(hosts).forEach(function (hname) {
+      var host = hosts[hname];
+      host.name = hname;
+      
+      // lookup credential pointer
+      host.credential = credentials[host.credential];
+      
+      // env variables can also have host specifics
+      var special = host.variables;
+      host.variables = util._extend({}, env.variables);
+      util._extend(host.variables, special);
+      
+      // service pointers
+      var snames = host.services;
+      host.services = {};
+      snames.forEach(function (sname) {
+        host.services[sname] = services[sname];
+      });
+    });
+  });
+  return config;
+}
+
 function expandPath (path, cb) {
   exec("echo " + path, cb);
 }
 
-function envVars (environment) {
-  var vars = environment.variables;
+function hostVars (host) {
+  var vars = host.variables;
   return Object.keys(vars).map(function (key) {
-    return key + "=" + vars[key];
+    return key + "=\"" + vars[key] + "\"";
   }).join(" ");
 }
 
-function serviceByName (service) {
-  var services = config.services;
-  for (var s in services) {
-    if (services[s].name === service) {
-      service = services[s];
-      break;
-    }
-  }
-  return service;
-}
-
-function credentialForHost (host) {
-  var credentials = config.credentials;
-  for (var c in credentials) {
-    if (credentials[c].name === host.credential) {
-      credential = credentials[c];
-      break;
-    }
-  }
-  if (!credential) {
-    throw new Error("No credential matching '" + host.credential + "' found");
-  }
-  return credential;
-}
-
-function forEachHost (environment, operation, cb, alldone) {
-  var hosts = environment.hosts;
+function forEachHost (environment, service, operation, cb, alldone) {
   var ops = {};
   var done = 0;
-  hosts.forEach(function (host) {
-    var credential = credentialForHost(host);
-    operation(host, credential, function (err, stdout, stderr) {
-      if (stderr && stderr.slice(-1) === "\n") {
-        stderr = stderr.slice(0, -1);
-      }
-      cb(err, { 
-        host: host,
-        stdout: stdout, 
-        stderr: stderr
+  var hosts = environment.hosts;
+  var hnames = Object.keys(hosts);
+  hnames.forEach(function (hname) {
+    var host = hosts[hname];
+    if (isServiceHost(host)) {
+      operation(host, host.credential, function (err, stdout, stderr) {
+        if (stderr && stderr.slice(-1) === "\n") {
+          stderr = stderr.slice(0, -1);
+        }
+        cb(err, {
+          host: host,
+          stdout: stdout,
+          stderr: stderr
+        });
+        checkDone();
       });
-      if (++done == hosts.length && alldone) {
-        alldone();
-      }
-    });
+    } else {
+      checkDone();
+    }
   });
+  
+  function isServiceHost (host) {
+    var isHost = true;
+    if (service) {
+      isHost = false;
+      for (var s in host.services) {
+        if (s === service.name) {
+          isHost = true;
+          break;
+        }
+      }
+    }
+    return isHost;
+  }
+  
+  function checkDone () {
+    if (++done == hnames.length && alldone) {
+      alldone();
+    }
+  }
 }
 
-function listDirForEnvironment (dir, environment, cb) {
+function listDirForEnvironment (dir, environment, service, cb) {
   var responses = [];
   var errors = [];
-  forEachHost(environment, function (host, credential, cb) {
+  forEachHost(environment, service, function (host, credential, cb) {
     listDirForHost(host.home + "/" + dir, host, credential, cb);
   }, function (err, response) {
     if (err) {
