@@ -1,9 +1,12 @@
 {
   "name": "deployer",
-  "description": "Deploy stuff",
   "version": "0.0.1",
-  "main": "deployer.js",
+  "description": "Deploy stuff",
+  "author": "Jesse Tane <jesse.tane@gmail.com>",
   "dependencies": {
-    "cui": "*"
+    "cui": "0.0.4"
+  },
+  "bin": {
+    "deployer": "index.js"
   }
 }
