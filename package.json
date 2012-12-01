@@ -4,7 +4,7 @@
   "description": "Deploy stuff",
   "author": "Jesse Tane <jesse.tane@gmail.com>",
   "dependencies": {
-    "cui": "0.0.4"
+    "cui": "0.0.5"
   },
   "bin": {
     "deployer": "index.js"

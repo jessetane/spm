@@ -1,4 +1,5 @@
 {
+  "name": "Example",
   "credentials": {
     "local": {
       "user": "jessetane",
@@ -14,19 +15,19 @@
       "hosts": {
         "localhost": {
           "credential": "local",
-          "directory": "/Users/jessetane/Desktop/mock-environments/development",
+          "directory": "/Users/jessetane/services",
           "services": {
-            "operator": "../../../operator",
-            "one.redis": "../../../redis",
-            "two.redis": "../../../redis",
+            "operator": "../../operator",
+            "one.redis": "../../redis",
+            "two.redis": "../../redis",
             "one.redis-app": {
-              "url": "../../../redis-app",
+              "source": "../../redis-app",
               "variables": {
                 "REDIS_HOST": "one.redis"
               }
             },
             "two.redis-app": {
-              "url": "../../../redis-app",
+              "source": "../../redis-app",
               "variables": {
                 "REDIS_HOST": "two.redis"
               }
@@ -42,17 +43,17 @@
           "credential": "virtual",
           "directory": "/home/jesse/services",
           "services": {
-            "operator": "../../../operator",
-            "one.redis.staging": "../../../redis",
-            "two.redis.staging": "../../../redis",
+            "operator": "../../operator",
+            "one.redis.staging": "../../redis",
+            "two.redis.staging": "../../redis",
             "one.redis-app.staging": {
-              "url": "../../../redis-app",
+              "url": "../../redis-app",
               "variables": {
                 "REDIS_HOST": "one.redis.staging"
               }
             },
             "two.redis-app.staging": {
-              "url": "../../../redis-app",
+              "url": "../../redis-app",
               "variables": {
                 "REDIS_HOST": "two.redis.staging"
               }
@@ -68,9 +69,9 @@
           "credential": "virtual",
           "directory": "/home/jesse/services",
           "services": {
-            "operator": "../../../operator",
-            "one.redis": "../../../redis",
-            "two.redis": "../../../redis"
+            "operator": "../../operator",
+            "one.redis": "../../redis",
+            "two.redis": "../../redis"
           }
         },
         "vm1": {
@@ -78,15 +79,15 @@
           "credential": "virtual",
           "directory": "/home/jesse/services",
           "services": {
-            "operator": "../../../operator",
+            "operator": "../../operator",
             "one.redis-app": {
-              "source": "../../../redis-app",
+              "source": "../../redis-app",
               "variables": {
                 "REDIS_HOST": "one.redis"
               }
             },
             "two.redis-app": {
-              "source": "../../../redis-app",
+              "source": "../../redis-app",
               "variables": {
                 "REDIS_HOST": "two.redis"
               }
