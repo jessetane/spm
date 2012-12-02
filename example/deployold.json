@@ -1,0 +1,100 @@
+{
+  "name": "Example",
+  "credentials": {
+    "local": {
+      "user": "jessetane",
+      "key": "~/.ssh/id_rsa"
+    },
+    "virtual": {
+      "user": "jesse",
+      "key": "~/.ssh/id_rsa"
+    }
+  },
+  "environments": {
+    "development": {
+      "hosts": {
+        "localhost": {
+          "credential": "local",
+          "directory": "/Users/jessetane/services",
+          "services": {
+            "operator": "../../operator",
+            "one.redis": "../../redis",
+            "two.redis": "../../redis",
+            "one.redis-app": {
+              "source": "../../redis-app",
+              "variables": {
+                "REDIS_HOST": "one.redis"
+              }
+            },
+            "two.redis-app": {
+              "source": "../../redis-app",
+              "variables": {
+                "REDIS_HOST": "two.redis"
+              }
+            }
+          }
+        }
+      }
+    },
+    "staging": {
+      "hosts": {
+        "vm2": {
+          "address": "192.168.50.12",
+          "credential": "virtual",
+          "directory": "/home/jesse/services",
+          "services": {
+            "operator": "../../operator",
+            "one.redis.staging": "../../redis",
+            "two.redis.staging": "../../redis",
+            "one.redis-app.staging": {
+              "url": "../../redis-app",
+              "variables": {
+                "REDIS_HOST": "one.redis.staging"
+              }
+            },
+            "two.redis-app.staging": {
+              "url": "../../redis-app",
+              "variables": {
+                "REDIS_HOST": "two.redis.staging"
+              }
+            }
+          }
+        }
+      }
+    },
+    "production": {
+      "hosts": {
+        "vm0": {
+          "address": "192.168.50.10",
+          "credential": "virtual",
+          "directory": "/home/jesse/services",
+          "services": {
+            "operator": "../../operator",
+            "one.redis": "../../redis",
+            "two.redis": "../../redis"
+          }
+        },
+        "vm1": {
+          "address": "192.168.50.11",
+          "credential": "virtual",
+          "directory": "/home/jesse/services",
+          "services": {
+            "operator": "../../operator",
+            "one.redis-app": {
+              "source": "../../redis-app",
+              "variables": {
+                "REDIS_HOST": "one.redis"
+              }
+            },
+            "two.redis-app": {
+              "source": "../../redis-app",
+              "variables": {
+                "REDIS_HOST": "two.redis"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

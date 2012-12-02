@@ -1,220 +1,217 @@
 {
-  "name": "Example",
-  "credentials": {
-    "local": {
+  "hosts": {
+    "localhost": {
+      "address": "127.0.0.1",
+      "environment": "development",
+      "root": "/Users/jessetane/services",
       "user": "jessetane",
       "key": "~/.ssh/id_rsa",
-      "name": "local"
+      "name": "localhost"
     },
-    "virtual": {
+    "vm2": {
+      "address": "192.168.50.12",
+      "environment": "staging",
+      "root": "/home/jesse/services",
       "user": "jesse",
       "key": "~/.ssh/id_rsa",
-      "name": "virtual"
+      "name": "vm2"
+    },
+    "vm0": {
+      "address": "192.168.50.10",
+      "environment": "production",
+      "root": "/home/jesse/services",
+      "user": "jesse",
+      "key": "~/.ssh/id_rsa",
+      "name": "vm0"
+    },
+    "vm1": {
+      "address": "192.168.50.11",
+      "environment": "production",
+      "root": "/home/jesse/services",
+      "user": "jesse",
+      "key": "~/.ssh/id_rsa",
+      "name": "vm1"
+    }
+  },
+  "services": {
+    "operator": {
+      "source": "../../operator",
+      "name": "operator",
+      "scripts": "bin"
+    },
+    "one.redis": {
+      "source": "../../redis",
+      "name": "one.redis",
+      "scripts": "bin"
+    },
+    "two.redis": {
+      "source": "../../redis",
+      "name": "two.redis",
+      "scripts": "bin"
+    },
+    "one.redis-app": {
+      "source": "../../redis",
+      "variables": {
+        "REDIS_HOST": "one.redis"
+      },
+      "name": "one.redis-app",
+      "scripts": "bin"
+    },
+    "two.redis-app": {
+      "source": "../../redis",
+      "variables": {
+        "REDIS_HOST": "two.redis"
+      },
+      "name": "two.redis-app",
+      "scripts": "bin"
     }
   },
   "environments": {
     "development": {
+      "name": "development",
       "hosts": {
         "localhost": {
-          "credential": {
-            "user": "jessetane",
-            "key": "~/.ssh/id_rsa",
-            "name": "local"
-          },
-          "directory": "/Users/jessetane/services",
-          "services": {
-            "operator": {
-              "source": "../../operator",
-              "name": "operator",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "one.redis": {
-              "source": "../../redis",
-              "name": "one.redis",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "two.redis": {
-              "source": "../../redis",
-              "name": "two.redis",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "one.redis-app": {
-              "source": "../../redis-app",
-              "variables": {
-                "REDIS_HOST": "one.redis"
-              },
-              "name": "one.redis-app",
-              "scripts": "bin"
-            },
-            "two.redis-app": {
-              "source": "../../redis-app",
-              "variables": {
-                "REDIS_HOST": "two.redis"
-              },
-              "name": "two.redis-app",
-              "scripts": "bin"
-            }
-          },
-          "name": "localhost",
           "address": "127.0.0.1",
-          "variables": {},
-          "vhosts": {
-            "two.redis-app": "127.0.0.1",
-            "one.redis-app": "127.0.0.1",
-            "two.redis": "127.0.0.1",
-            "one.redis": "127.0.0.1",
-            "operator": "127.0.0.1"
-          }
+          "environment": "development",
+          "root": "/Users/jessetane/services",
+          "user": "jessetane",
+          "key": "~/.ssh/id_rsa",
+          "name": "localhost"
         }
       },
-      "name": "development"
+      "services": {
+        "operator": {
+          "source": "../../operator",
+          "name": "operator",
+          "scripts": "bin"
+        },
+        "one.redis": {
+          "source": "../../redis",
+          "name": "one.redis",
+          "scripts": "bin"
+        },
+        "two.redis": {
+          "source": "../../redis",
+          "name": "two.redis",
+          "scripts": "bin"
+        },
+        "one.redis-app": {
+          "source": "../../redis",
+          "variables": {
+            "REDIS_HOST": "one.redis"
+          },
+          "name": "one.redis-app",
+          "scripts": "bin"
+        },
+        "two.redis-app": {
+          "source": "../../redis",
+          "variables": {
+            "REDIS_HOST": "two.redis"
+          },
+          "name": "two.redis-app",
+          "scripts": "bin"
+        }
+      }
     },
     "staging": {
+      "name": "staging",
       "hosts": {
         "vm2": {
           "address": "192.168.50.12",
-          "credential": {
-            "user": "jesse",
-            "key": "~/.ssh/id_rsa",
-            "name": "virtual"
-          },
-          "directory": "/home/jesse/services",
-          "services": {
-            "operator": {
-              "source": "../../operator",
-              "name": "operator",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "one.redis.staging": {
-              "source": "../../redis",
-              "name": "one.redis.staging",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "two.redis.staging": {
-              "source": "../../redis",
-              "name": "two.redis.staging",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "one.redis-app.staging": {
-              "url": "../../redis-app",
-              "variables": {
-                "REDIS_HOST": "one.redis.staging"
-              },
-              "name": "one.redis-app.staging",
-              "scripts": "bin"
-            },
-            "two.redis-app.staging": {
-              "url": "../../redis-app",
-              "variables": {
-                "REDIS_HOST": "two.redis.staging"
-              },
-              "name": "two.redis-app.staging",
-              "scripts": "bin"
-            }
-          },
-          "name": "vm2",
-          "variables": {},
-          "vhosts": {
-            "two.redis-app.staging": "192.168.50.12",
-            "one.redis-app.staging": "192.168.50.12",
-            "two.redis.staging": "192.168.50.12",
-            "one.redis.staging": "192.168.50.12",
-            "operator": "192.168.50.12"
-          }
+          "environment": "staging",
+          "root": "/home/jesse/services",
+          "user": "jesse",
+          "key": "~/.ssh/id_rsa",
+          "name": "vm2"
         }
       },
-      "name": "staging"
+      "services": {
+        "operator": {
+          "source": "../../operator",
+          "name": "operator",
+          "scripts": "bin"
+        },
+        "one.redis": {
+          "source": "../../redis",
+          "name": "one.redis",
+          "scripts": "bin"
+        },
+        "two.redis": {
+          "source": "../../redis",
+          "name": "two.redis",
+          "scripts": "bin"
+        },
+        "one.redis-app": {
+          "source": "../../redis",
+          "variables": {
+            "REDIS_HOST": "one.redis"
+          },
+          "name": "one.redis-app",
+          "scripts": "bin"
+        },
+        "two.redis-app": {
+          "source": "../../redis",
+          "variables": {
+            "REDIS_HOST": "two.redis"
+          },
+          "name": "two.redis-app",
+          "scripts": "bin"
+        }
+      }
     },
     "production": {
+      "name": "production",
       "hosts": {
         "vm0": {
           "address": "192.168.50.10",
-          "credential": {
-            "user": "jesse",
-            "key": "~/.ssh/id_rsa",
-            "name": "virtual"
-          },
-          "directory": "/home/jesse/services",
-          "services": {
-            "operator": {
-              "source": "../../operator",
-              "name": "operator",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "one.redis": {
-              "source": "../../redis",
-              "name": "one.redis",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "two.redis": {
-              "source": "../../redis",
-              "name": "two.redis",
-              "scripts": "bin",
-              "variables": {}
-            }
-          },
-          "name": "vm0",
-          "variables": {},
-          "vhosts": {
-            "two.redis-app": "192.168.50.11",
-            "one.redis-app": "192.168.50.11",
-            "two.redis": "192.168.50.10",
-            "one.redis": "192.168.50.10",
-            "operator": "192.168.50.10"
-          }
+          "environment": "production",
+          "root": "/home/jesse/services",
+          "user": "jesse",
+          "key": "~/.ssh/id_rsa",
+          "name": "vm0"
         },
         "vm1": {
           "address": "192.168.50.11",
-          "credential": {
-            "user": "jesse",
-            "key": "~/.ssh/id_rsa",
-            "name": "virtual"
-          },
-          "directory": "/home/jesse/services",
-          "services": {
-            "operator": {
-              "source": "../../operator",
-              "name": "operator",
-              "scripts": "bin",
-              "variables": {}
-            },
-            "one.redis-app": {
-              "source": "../../redis-app",
-              "variables": {
-                "REDIS_HOST": "one.redis"
-              },
-              "name": "one.redis-app",
-              "scripts": "bin"
-            },
-            "two.redis-app": {
-              "source": "../../redis-app",
-              "variables": {
-                "REDIS_HOST": "two.redis"
-              },
-              "name": "two.redis-app",
-              "scripts": "bin"
-            }
-          },
-          "name": "vm1",
-          "variables": {},
-          "vhosts": {
-            "two.redis-app": "192.168.50.11",
-            "one.redis-app": "192.168.50.11",
-            "two.redis": "192.168.50.10",
-            "one.redis": "192.168.50.10",
-            "operator": "192.168.50.11"
-          }
+          "environment": "production",
+          "root": "/home/jesse/services",
+          "user": "jesse",
+          "key": "~/.ssh/id_rsa",
+          "name": "vm1"
         }
       },
-      "name": "production"
+      "services": {
+        "operator": {
+          "source": "../../operator",
+          "name": "operator",
+          "scripts": "bin"
+        },
+        "one.redis": {
+          "source": "../../redis",
+          "name": "one.redis",
+          "scripts": "bin"
+        },
+        "two.redis": {
+          "source": "../../redis",
+          "name": "two.redis",
+          "scripts": "bin"
+        },
+        "one.redis-app": {
+          "source": "../../redis",
+          "variables": {
+            "REDIS_HOST": "one.redis"
+          },
+          "name": "one.redis-app",
+          "scripts": "bin"
+        },
+        "two.redis-app": {
+          "source": "../../redis",
+          "variables": {
+            "REDIS_HOST": "two.redis"
+          },
+          "name": "two.redis-app",
+          "scripts": "bin"
+        }
+      }
     }
   }
 }

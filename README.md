@@ -66,29 +66,86 @@ deployer
 	└──[ 4 ] install
 	└──[ 5 ] uninstall
 	
-	status
-	services
-		deploy
-		withdraw
-		command
-	hosts
-		logon
-
-
-deployer production status
-
-deployer production services status
-
-deployer production services operator@v0.0.1 start
-deployer production services operator@HEAD stop
-deployer production services operator@HEAD uninstall
-
-deployer development hosts localhost install operator HEAD
-deployer development hosts localhost uninstall operator v0.0.1
-deployer development hosts localhost logon
-
-deployer development
+	
+  ┌ actions
+  ├──[ 1 ] deploy
+  ├──[ 2 ] withdraw
+  └──[ 3 ] manage
 
 
 ## License
 MIT
+
+
+{
+	"hosts": {
+	  "localhost": {
+	    "address": "127.0.0.1",
+	    "environment": "development",
+	    "user": "jessetane",
+	    "key": "~/.ssh/id_rsa"
+	  }
+	  "vm2": {
+			"address": "192.168.50.12",
+	    "environment": "staging",
+	    "user": "jesse",
+	    "key": "~/.ssh/id_rsa"
+		},
+		"vm0": {
+			"address": "192.168.50.10",
+	    "environment": "production",
+	    "user": "jesse",
+	    "key": "~/.ssh/id_rsa"
+		},
+		"vm1": {
+			"address": "192.168.50.11",
+	    "environment": "production",
+	    "user": "jesse",
+	    "key": "~/.ssh/id_rsa"
+		}
+	},
+	"services": {
+		"operator": "../../operator",
+		"one.redis": "../../redis",
+		"two.redis": "../../redis",
+		"one.redis-app": {
+			"source": "../../redis",
+			"variables": {
+				"REDIS_HOST": "one.redis"
+			}
+		}
+		"two.redis-app": {
+			"source": "../../redis",
+			"variables": {
+				"REDIS_HOST": "two.redis"
+			}
+		}
+	}
+}
+
+
+environments
+	services
+		status
+			- list services by host
+				command
+				connect
+				withdraw
+		deploy
+			- list sources
+			 	- list versions
+					- list hosts
+						-> d production deploy operator HEAD vm0
+	hosts
+		- list hosts
+			status
+			connect
+			provision
+			terminate
+			image
+
+d production hosts status
+d production services status
+d production services deploy operator HEAD vm0
+d production services status "vm0 operator@HEAD" withdraw
+
