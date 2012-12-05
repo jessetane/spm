@@ -34,13 +34,13 @@
 		"one.redis": "../../redis",
 		"two.redis": "../../redis",
 		"one.redis-app": {
-			"source": "../../redis",
+			"source": "../../redis-app",
 			"variables": {
 				"REDIS_HOST": "one.redis"
 			}
 		},
 		"two.redis-app": {
-			"source": "../../redis",
+			"source": "../../redis-app",
 			"variables": {
 				"REDIS_HOST": "two.redis"
 			}

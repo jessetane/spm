@@ -50,7 +50,7 @@
       "scripts": "bin"
     },
     "one.redis-app": {
-      "source": "../../redis",
+      "source": "../../redis-app",
       "variables": {
         "REDIS_HOST": "one.redis"
       },
@@ -58,7 +58,7 @@
       "scripts": "bin"
     },
     "two.redis-app": {
-      "source": "../../redis",
+      "source": "../../redis-app",
       "variables": {
         "REDIS_HOST": "two.redis"
       },
@@ -96,7 +96,7 @@
           "scripts": "bin"
         },
         "one.redis-app": {
-          "source": "../../redis",
+          "source": "../../redis-app",
           "variables": {
             "REDIS_HOST": "one.redis"
           },
@@ -104,7 +104,7 @@
           "scripts": "bin"
         },
         "two.redis-app": {
-          "source": "../../redis",
+          "source": "../../redis-app",
           "variables": {
             "REDIS_HOST": "two.redis"
           },
@@ -142,7 +142,7 @@
           "scripts": "bin"
         },
         "one.redis-app": {
-          "source": "../../redis",
+          "source": "../../redis-app",
           "variables": {
             "REDIS_HOST": "one.redis"
           },
@@ -150,7 +150,7 @@
           "scripts": "bin"
         },
         "two.redis-app": {
-          "source": "../../redis",
+          "source": "../../redis-app",
           "variables": {
             "REDIS_HOST": "two.redis"
           },
@@ -196,7 +196,7 @@
           "scripts": "bin"
         },
         "one.redis-app": {
-          "source": "../../redis",
+          "source": "../../redis-app",
           "variables": {
             "REDIS_HOST": "one.redis"
           },
@@ -204,7 +204,7 @@
           "scripts": "bin"
         },
         "two.redis-app": {
-          "source": "../../redis",
+          "source": "../../redis-app",
           "variables": {
             "REDIS_HOST": "two.redis"
           },
