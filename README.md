@@ -12,3 +12,12 @@ Not stable... still experimenting.
 
 ## License
 MIT
+
+## TODO
+* need a way to support multiple names/service (www)
+* should export variables before running commands
+* operator proxy needs to hide errors
+* operator needs a better 404
+* withdraw error only happens when > 1 version is deployed
+* need a way to pass env variables
+* show ssh command output?
