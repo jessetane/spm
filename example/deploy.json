@@ -1,49 +1,29 @@
 {
-	"hosts": {
-	  "localhost": {
-	    "address": "127.0.0.1",
-	    "environment": "development",
-	    "root": "/Users/jessetane/services",
-	    "user": "jessetane",
-	    "key": "~/.ssh/id_rsa"
-	  },
-	  "vm2": {
-			"address": "192.168.50.12",
-	    "environment": "staging",
-	    "root": "/home/jesse/services",
-	    "user": "jesse",
-	    "key": "~/.ssh/id_rsa"
-		},
-		"vm0": {
-			"address": "192.168.50.10",
-	    "environment": "production",
-	    "root": "/home/jesse/services",
-	    "user": "jesse",
-	    "key": "~/.ssh/id_rsa"
-		},
-		"vm1": {
-			"address": "192.168.50.11",
-	    "environment": "production",
-	    "root": "/home/jesse/services",
-	    "user": "jesse",
-	    "key": "~/.ssh/id_rsa"
-		}
-	},
-	"services": {
-		"operator": "../../operator",
-		"one.redis": "../../redis",
-		"two.redis": "../../redis",
-		"one.redis-app": {
-			"source": "../../redis-app",
-			"variables": {
-				"REDIS_HOST": "one.redis"
-			}
-		},
-		"two.redis-app": {
-			"source": "../../redis-app",
-			"variables": {
-				"REDIS_HOST": "two.redis"
-			}
-		}
-	}
+  "repos": [
+    "file:///Users/jessetane/Dropbox/Jesse/Projects/github/redis",
+    "file:///Users/jessetane/Dropbox/Jesse/Projects/github/redis-app",
+    "file:///Users/jessetane/Dropbox/Jesse/Projects/github/operator"
+  ],
+  "environments": {
+    "development": {
+      "machines": {
+        "localhost": {
+          "address": "127.0.0.1",
+    	    "root": "/Users/jessetane/services",
+    	    "user": "jessetane",
+    	    "key": "~/.ssh/id_rsa"
+        }
+      }
+    },
+    "production": {
+      "machines": {
+        "twosixheave": {
+          "address": "54.241.17.64",
+    	    "root": "/home/server/services",
+    	    "user": "server",
+    	    "key": "~/.ssh/twosixheave-keypair-nca"
+        }
+      }
+    }
+  }
 }

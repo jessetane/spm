@@ -19,36 +19,104 @@ var path = require("path")
 var config = null
 
 
+//
+//  flow
+//
+
+// repos
+// versions
+// environments (if there are more than one)
+// machines (if there are more than one)
+// domains (comma seperated)
+// move the code
+// run hooks
+
 cui.push({
   title: "pick a repository to deploy",
   type: "buttons",
   data: function (cb) {
     exec("echo ~", function (err, path) {
-      config = require(path.slice(0,-1) + "/.deploy.json")
+      config = loadConfig()
       listRepos(config.repos, cb)
     })
   }
 })
 
-function loadConfig (file) {
-  
+cui.push({
+  title: "versions",
+  type: "buttons",
+  data: function (cb) {
+    var service = cui.last(2)
+    getVersions(cui.last(2), cb)
+  }
+})
+
+cui.push(function (cb) {
+  var err, environments = config.environments
+  var keys = (environments) ? Object.keys(environments) : null
+  if (environments && keys && keys.length) {
+    if (keys.length === 1) {
+      cui.results.push(environments[keys[0]])
+    } else {
+      var v = new EnvironmentsView(environments)
+      cui.splice(v)
+    }
+  } else {
+    err = new Error("no environments found")
+  }
+  cb(err)
+})
+
+cui.push(function (cb) {
+  var err, machines
+  if (cui.results.length === 3) {
+    machines = cui.last(1).machines
+  } else {
+    machines = config.machines
+  }
+  var keys = (machines) ? Object.keys(machines) : null
+  if (machines && keys && keys.length) {
+    if (keys.length === 1) {
+      cui.results.push(machines[keys[0]])
+    } else {
+      cui.splice(new MachinesView(machines))
+    }
+  } else {
+    err = new Error("no machines found")
+  }
+  cb(err)
+})
+
+
+//
+//  views
+//
+
+function EnvironmentsView (environments) {
+  this.title = "environments"
+  this.type = "buttons"
+  this.data = environments
 }
 
-function flatten (arrayOfArrays, depth) {
-  if (Array.isArray(arrayOfArrays)) {
-    var temp = []
-    for (var a in arrayOfArrays) {
-      var array = arrayOfArrays[a]
-      if (depth) {
-        array = flatten(array, depth-1)
-      } else if (depth !== undefined) {
-        array = flatten(array)
-      }
-      temp = temp.concat(array)
-    }
-    arrayOfArrays = temp
-  }
-  return arrayOfArrays
+function MachinesView (machines) {
+  this.title = "machines"
+  this.type = "buttons"
+  this.data = machines
+}
+
+var domains = {
+  type: "fields",
+  data: "comma seperated list of domains: "
+}
+
+
+//
+//  actions
+//
+
+function loadConfig () {
+  //config = require(path.slice(0,-1) + "/.deploy")
+  return require("./example/deploy")
 }
 
 function listRepos (repos, cb) {
@@ -73,6 +141,39 @@ function listRepos (repos, cb) {
     cb(err, results)
   })
 }
+
+function getVersions (service, cb) {
+  var cmd;
+  if (service.type === "git") {
+    cmd = "git ls-remote " + service.url
+    exec(cmd, function (err, refs) {
+      var temp = []
+      refs && (refs = refs.split("\n").slice(0,-1))
+      refs && refs.forEach(function (ref) {
+        ref = ref.split("\t")[1].split("tags/")
+        if (ref.length === 2) {
+          ref = ref[1]
+          if (ref.indexOf("^") === -1) {
+            temp.push(ref)
+          }
+        }
+      })
+      if (temp[0] !== "HEAD") temp.push("HEAD")
+      cb(err, temp)
+    })
+  } else if (service.type === "file") {
+    cmd = "cd " + service.url + "; git tag"
+    exec(cmd, function (err, data) {
+      var versions = data.split("\n").slice(0, -1)
+      cb(err, [ "HEAD" ].concat(versions.reverse()))
+    })
+  }
+}
+
+
+//
+// action helpers
+//
 
 var fetchers = {
   "file": fetchFile,
@@ -136,9 +237,9 @@ function fetchGithub (username, usernameurl, cb) {
             temp = temp.concat(body)
             cb(null, temp.map(function (repo) {
               return {
-                name: repo.name,
+                name: usernameurl.path + "/" + repo.name,
                 type: "git",
-                url: repo.url
+                url: repo.git_url
               }
             }))
           }
@@ -158,4 +259,26 @@ function fetchGit (repo, repourl, cb) {
     type: "git",
     url: repo
   })
+}
+
+
+//
+//  utils
+//
+
+function flatten (arrayOfArrays, depth) {
+  if (Array.isArray(arrayOfArrays)) {
+    var temp = []
+    for (var a in arrayOfArrays) {
+      var array = arrayOfArrays[a]
+      if (depth) {
+        array = flatten(array, depth-1)
+      } else if (depth !== undefined) {
+        array = flatten(array)
+      }
+      temp = temp.concat(array)
+    }
+    arrayOfArrays = temp
+  }
+  return arrayOfArrays
 }
