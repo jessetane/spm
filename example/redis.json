@@ -1,9 +1,7 @@
 {
   "repos": {
-    "twosixheave.com": "git@github.com:jessetane/twosixheave.com.git",
-    "operator": "git://github.com/jessetane/operator.git",
-    "guestd.com": "file:///Users/jessetane/Dropbox/Jesse/Projects/guestd/software/website",
-    "local": "directory:///Users/jessetane/Dropbox/Jesse/Projects/github"
+    "twosixheave.com": "https://github.com/jessetane/twosixheave.com.git",
+    "guestd.com": "file:///Users/jessetane/Dropbox/Jesse/Projects/guestd/software/website"
   },
   "environments": {
     "development": {

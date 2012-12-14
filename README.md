@@ -20,4 +20,7 @@ MIT
 * operator needs a better 404
 * withdraw error only happens when > 1 version is deployed
 * need a way to pass env variables
-* show ssh command output?
+* stream ssh command output?
+
+# no way to run user scripts at boot | this could be solved by having one system job loop over the users' .init folder
+# 

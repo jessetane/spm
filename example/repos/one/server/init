@@ -1,0 +1,26 @@
+#
+# init.sh
+#
+
+env SERVICE="one"
+
+description $SERVICE
+
+start on filesystem
+stop on shutdown
+
+respawn
+respawn limit 10 10
+
+pre-start script
+  
+end script
+
+script
+  . /usr/local/bin/$SERVICE.env
+  /usr/local/bin/$SERVICE.js
+end script
+
+pre-stop script
+  
+end script
