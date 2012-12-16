@@ -20,6 +20,9 @@ cui.push({
   type: "buttons",
   data: function (cb) {
     config = require("./example/deploy")
+    // TODO: normalize
+    // config.services.machines
+    // config.services.environments
     async.parallel([
       function (cb) { Repo.parse(config, cb) },
       function (cb) { Machine.parse(config, cb) }
@@ -61,7 +64,7 @@ cui.push(function (cb) {
 
 cui.push({
   type: "fields",
-  data: "service domain: "
+  data: "service name: "
 })
 
 cui.push({
@@ -70,40 +73,36 @@ cui.push({
 })
 
 cui.push(function (cb) {
-  var repo = cui.last(6)
-  var version = cui.last(5)
-  var machine = cui.last(3)
-  var domain = cui.last(2)
-  console.log("\nexists?:")
-  console.log(repo)
-  console.log(version)
-  console.log(machine)
-  console.log(domain, "\n")
-  cb()
+  var serviceName = cui.last(2)
+  var serviceConf = config.services[serviceName]
+  var props = util._extend(serviceConf || {}, {
+    repo: cui.last(6),
+    version: cui.last(5),
+    machines: [ cui.last(3) ],
+    name: serviceName,
+    aliases: cui.last(1)
+  })
+  var service = new Service(props)
+  cui.results.push(service)
+  service.isDeployed(function (err, data) {
+    if (!err && data) {
+      cui.splice(new views.Confirmation(service))
+      cui.splice(function (cb) {
+        var err = null
+        if (cui.last(1).toLowerCase().indexOf("y") !== 0) {
+          err = new Error("overwrite deploy aborted")
+        }
+        cb(err)
+      })
+    }
+    cb(err)
+  })
 })
 
 cui.push(function (cb) {
-  var environment = cui.last(4)
-  var machine = cui.last(3)
-  var domain = cui.last(2)
-  var aliases = cui.last(1)
-  console.log("update dns:")
-  console.log(environment)
-  console.log(machine)
-  console.log(domain)
-  console.log(aliases, "\n")
-  cb()
-})
-
-cui.push(function (cb) {
-  var repo = cui.last(6)
-  var version = cui.last(5)
-  var machine = cui.last(3)
-  var domain = cui.last(2)
-  console.log("move code:")
-  console.log(repo)
-  console.log(version)
-  console.log(machine)
-  console.log(domain, "\n")
-  cb()
+  var service = cui.last(1)
+  service.deploy(function (err, data) {
+    if (!err) console.log("deploy succeeded:", data)
+    cb(err)
+  })
 })

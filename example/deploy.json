@@ -3,14 +3,29 @@
     "twosixheave.com": "git@github.com:jessetane/twosixheave.com.git",
     "operator": "git://github.com/jessetane/operator.git",
     "guestd.com": "file:///Users/jessetane/Dropbox/Jesse/Projects/guestd/software/website",
-    "local": "directory:///Users/jessetane/Dropbox/Jesse/Projects/github"
+    "local": "directory:///Users/jessetane/Dropbox/Jesse/Projects/github",
+    "examples": {
+      "url": "directory:///Users/jessetane/Dropbox/Jesse/Projects/github/deployer/example/repos",
+      "hooks": {
+        "post-deploy": "source environment; stop $SERVICE@$VERSION; bin/install; start $SERVICE@$VERSION"
+      }
+    }
+  },
+  "services": {
+    "one.redis-app.com": {
+      "repo": "examples/redis-app",
+      "aliases": "www.one.redis-app.com",
+      "variables": {
+        "REDIS": "one.redis.com"
+      }
+    }
   },
   "environments": {
     "development": {
       "machines": {
         "localhost": {
           "address": "127.0.0.1",
-    	    "root": "/Users/jessetane/services",
+    	    "home": "/Users/jessetane/services",
     	    "user": "jessetane",
     	    "key": "~/.ssh/id_rsa"
         }
@@ -20,7 +35,7 @@
       "machines": {
         "vm0": {
           "address": "192.168.50.10",
-    	    "root": "/home/jesse/services",
+    	    "home": "/home/jesse/services",
     	    "user": "jesse",
     	    "key": "~/.ssh/id_rsa"
         }
@@ -30,7 +45,7 @@
       "machines": {
         "twosixheave": {
           "address": "54.241.17.64",
-    	    "root": "/home/server/services",
+    	    "home": "/home/server/services",
     	    "user": "server",
     	    "key": "~/.ssh/twosixheave-keypair-nca"
         }
