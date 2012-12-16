@@ -1,0 +1,4 @@
+export MSG=hey there
+export SERVICE=two.twosixheave.com
+export VERSION=HEAD
+export ALIASES=www.twosixheave.com, bam.twosixheave.com

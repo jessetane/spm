@@ -1,6 +1,0 @@
-#
-# install
-#
-
-
-cp -f ./init.conf ~/.init/$SERVICE.conf

@@ -1,54 +1,37 @@
 {
   "repos": {
-    "twosixheave.com": "git@github.com:jessetane/twosixheave.com.git",
-    "operator": "git://github.com/jessetane/operator.git",
-    "guestd.com": "file:///Users/jessetane/Dropbox/Jesse/Projects/guestd/software/website",
-    "local": "directory:///Users/jessetane/Dropbox/Jesse/Projects/github",
-    "examples": {
-      "url": "directory:///Users/jessetane/Dropbox/Jesse/Projects/github/deployer/example/repos",
+    "example-one": "/Users/jessetane/Dropbox/Jesse/Projects/github/deployer/example/repos/one",
+    "example-two": {
+      "url": "/Users/jessetane/Dropbox/Jesse/Projects/github/deployer/example/repos/two",
       "hooks": {
         "post-deploy": "source environment; stop $SERVICE@$VERSION; bin/install; start $SERVICE@$VERSION"
-      }
-    }
-  },
-  "services": {
-    "one.redis-app.com": {
-      "repo": "examples/redis-app",
-      "aliases": "www.one.redis-app.com",
+      },
       "variables": {
-        "REDIS": "one.redis.com"
+        "MSG": "hey there"
       }
     }
   },
   "environments": {
-    "development": {
-      "machines": {
-        "localhost": {
-          "address": "127.0.0.1",
-    	    "home": "/Users/jessetane/services",
-    	    "user": "jessetane",
-    	    "key": "~/.ssh/id_rsa"
-        }
-      }
-    },
     "staging": {
       "machines": {
-        "vm0": {
-          "address": "192.168.50.10",
-    	    "home": "/home/jesse/services",
-    	    "user": "jesse",
+        "ubuntu-cloud": {
+          "address": "192.168.50.13",
+    	    "user": "server",
     	    "key": "~/.ssh/id_rsa"
         }
       }
-    },
-    "production": {
-      "machines": {
-        "twosixheave": {
-          "address": "54.241.17.64",
-    	    "home": "/home/server/services",
-    	    "user": "server",
-    	    "key": "~/.ssh/twosixheave-keypair-nca"
-        }
+    }
+  },
+  "services": {
+    "two.com": {
+      "repo": "example-one",
+      "version": "HEAD",
+      "aliases": [
+        "www.two.com",
+        "test.two.com"
+      ],
+      "variables": {
+        "MSG": "wheee"
       }
     }
   }
