@@ -33,6 +33,33 @@ cui.push({
 
 // versions: if git, commits? tags? manual + HEAD?
 
+cui.push(function (cb) {
+  var repo = cui.last(1)
+  if (repo.type.indexOf("git") > -1) {
+    cui.splice({
+      title: "versions",
+      type: "buttons",
+      data: function (cb) {
+        repo.versions(cb)
+      }
+    })
+  } else {
+    var v = {
+      type: "fields",
+      data: "version [HEAD]: ",
+      action: function (cb) {
+        if (cui.last(1) === undefined) {
+          cui.results.splice(-1, 1, "HEAD")
+        }
+        cb()
+      }
+    }
+    cui.splice(vv)
+  }
+  cb()
+})
+
+/*
 cui.push({
   title: "versions",
   type: "buttons",
@@ -40,6 +67,8 @@ cui.push({
     cui.last(1).versions(cb)
   }
 })
+*/
+
 
 cui.push(function (cb) {
   var environments = config.environments
