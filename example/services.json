@@ -1,5 +1,6 @@
 {
   "repos": {
+    "cui": "https://github.com/jessetane/cui.git",
     "twosixheave.com": "/Users/jessetane/Dropbox/Jesse/Projects/twosixheave/website",
     "example-one": "/Users/jessetane/Dropbox/Jesse/Projects/github/spm/example/repos/one",
     "example-two": {
