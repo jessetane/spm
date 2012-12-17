@@ -18,7 +18,7 @@ var config = null
 
 
 cui.push({
-  title: "pick a repo to deploy",
+  title: "repos",
   type: "buttons",
   data: function (cb) {
     config = require("./example/services")
@@ -34,25 +34,16 @@ cui.push({
 cui.push(function (cb) {
   var repo = cui.last(1)
   if (repo.type.indexOf("git") > -1) {
-    cui.splice({
-      title: "versions",
-      type: "buttons",
-      data: function (cb) {
-        repo.versions(cb)
-      }
-    })
+    cui.splice(new views.GitVersions(repo))
   } else {
-    var v = {
-      type: "fields",
-      data: "version [HEAD]: ",
-      action: function (cb) {
-        if (cui.last(1) === undefined) {
-          cui.results.splice(-1, 1, "HEAD")
-        }
-        cb()
+    cui.splice(new views.RawVersions(repo))
+    cui.splice(function (cb) {
+      var answer = cui.last(1)
+      if (answer === undefined) {
+        cui.results.splice(-1, 1, "HEAD")
       }
-    }
-    cui.splice(v)
+      cb()
+    })
   }
   cb()
 })

@@ -6,11 +6,6 @@
  */
 
 
-// deploy - automated deployment based on service entry
-// inspect - status report
-// operate - manually deploy a repo
-
-
 var cui = require("cui")
 
 cui.push({
