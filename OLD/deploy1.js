@@ -38,7 +38,7 @@ cui.push({
   data: function (cb) {
     exec("echo ~", function (err, path) {
       config = loadConfig()
-      listRepos(config.repos, cb)
+      listPackages(config.repos, cb)
     })
   }
 })

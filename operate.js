@@ -21,17 +21,15 @@ cui.push({
   title: "pick a repo to deploy",
   type: "buttons",
   data: function (cb) {
-    config = require("./example/deploy")
+    config = require("./example/services")
     async.parallel([
-      function (cb) { Repo.parse(config, cb) },
-      function (cb) { Machine.parse(config, cb) }
+      function (cb) { Repo.configure(config, cb) },
+      function (cb) { Machine.configure(config, cb) }
     ], function (err) {
       cb(err, config.repos)
     })
   }
 })
-
-// versions: if git, commits? tags? manual + HEAD?
 
 cui.push(function (cb) {
   var repo = cui.last(1)
@@ -54,21 +52,10 @@ cui.push(function (cb) {
         cb()
       }
     }
-    cui.splice(vv)
+    cui.splice(v)
   }
   cb()
 })
-
-/*
-cui.push({
-  title: "versions",
-  type: "buttons",
-  data: function (cb) {
-    cui.last(1).versions(cb)
-  }
-})
-*/
-
 
 cui.push(function (cb) {
   var environments = config.environments

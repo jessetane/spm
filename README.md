@@ -1,11 +1,21 @@
-# deployer
+# spm
+
+## What
 Deploy and command multiple versions of multiple services on multiple hosts in multiple environments.
 
+
+
 ## Why
-The world needs more deploy tools, duh.
+spm is a tool for deploying and supervising services. 
+
+npm isn't a great tool for snapshotting updates
+npm can't push
+npm naming is lame, urls are better imo
 
 ## How
 Not sure yet.
+
+
 
 ## Usage
 Not stable... still experimenting.
@@ -14,10 +24,9 @@ Not stable... still experimenting.
 MIT
 
 ## TODO
-* need a way to support multiple names/service (www)
-* should export variables before running commands
+* stream ssh? https://github.com/mscdex/ssh2
+* stream git? https://github.com/hij1nx/git-stream
+
+--
 * operator proxy needs to hide errors
 * operator needs a better 404
-* withdraw error only happens when > 1 version is deployed
-* need a way to pass env variables
-* stream ssh command output?

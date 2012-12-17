@@ -1,10 +1,11 @@
 {
   "repos": {
-    "example-one": "/Users/jessetane/Dropbox/Jesse/Projects/github/deployer/example/repos/one",
+    "twosixheave.com": "/Users/jessetane/Dropbox/Jesse/Projects/twosixheave/website",
+    "example-one": "/Users/jessetane/Dropbox/Jesse/Projects/github/spm/example/repos/one",
     "example-two": {
-      "url": "/Users/jessetane/Dropbox/Jesse/Projects/github/deployer/example/repos/two",
+      "url": "/Users/jessetane/Dropbox/Jesse/Projects/github/spm/example/repos/two",
       "hooks": {
-        "post-deploy": "source environment; stop $SERVICE@$VERSION; bin/install; start $SERVICE@$VERSION"
+        "post-deploy": "source ./environment; stop $SERVICE@$VERSION; bin/install; start $SERVICE@$VERSION"
       },
       "variables": {
         "MSG": "hey there"
@@ -24,7 +25,7 @@
   },
   "services": {
     "two.com": {
-      "repo": "example-one",
+      "package": "example-one",
       "version": "HEAD",
       "aliases": [
         "www.two.com",
