@@ -7,7 +7,7 @@
 
 
 var http = require('http')
-var server = http.createServer(function (req, res) {
+var server = http.createServer(function(req, res) {
   console.log(req.headers.host)
   res.end(process.env.MSG)
 })

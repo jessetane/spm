@@ -18,16 +18,16 @@ var config = require('./example/services')
 var config = require(process.cwd() + '/deploy.json')
 
 
-cui.push(function (cb) {
+cui.push(function(cb) {
   async.parallel([
-    function (cb) { Repo.configure(config, cb) },
-    function (cb) { Machine.configure(config, cb) }
-  ], function (err) {
+    function(cb) { Repo.configure(config, cb) },
+    function(cb) { Machine.configure(config, cb) }
+  ], function(err) {
     cb(err, config.repos)
   })
 })
 
-cui.push(function (cb) {
+cui.push(function(cb) {
   var environments = config.environments
   var keys = Object.keys(environments)
   if (keys.length > 1) {
@@ -43,17 +43,17 @@ cui.push({
   type: 'buttons',
   properties: [ 'service', 'status' ],
   categories: [ 'environment', 'machine' ],
-  data: function (cb) {
+  data: function(cb) {
     var ops = []
     var machines = cui.last(1).machines
     for (var m in machines) {
       var machine = new Machine(machines[m])
-      ops.push(function (cb) {
+      ops.push(function(cb) {
         //machine.status(cb)
         machine.connect()
       })
     }
-    // async.parallel(ops, function (err, data) {
+    // async.parallel(ops, function(err, data) {
     //   if (!err) {
     //     data = util.flatten(data, 5)
     //   }

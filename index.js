@@ -18,7 +18,7 @@ cui.push({
   ]
 })
 
-cui.push(function (cb) {
+cui.push(function(cb) {
   var command = cui.last(1)
   require('./' + command)
   cb()

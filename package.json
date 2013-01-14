@@ -4,7 +4,7 @@
   "description": "Deploy and command services",
   "author": "Jesse Tane <jesse.tane@gmail.com>",
   "dependencies": {
-    "cui": "0.0.7",
+    "cui": "0.0.9",
     "request": "2.12.0",
     "async": "0.1.22"
   },
