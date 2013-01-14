@@ -6,20 +6,20 @@
  */
 
 
-var cui = require("cui")
+var cui = require('cui')
 
 cui.push({
-  title: "action",
-  type: "buttons",
+  title: 'action',
+  type: 'buttons',
   data: [
-    "deploy",
-    "inspect",
-    "operate"
+    'deploy',
+    'inspect',
+    'operate'
   ]
 })
 
 cui.push(function (cb) {
   var command = cui.last(1)
-  require("./" + command)
+  require('./' + command)
   cb()
 })

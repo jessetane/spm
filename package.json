@@ -1,14 +1,14 @@
 {
-  "name": "deployer",
+  "name": "spm",
   "version": "0.0.1",
-  "description": "Deploy stuff",
+  "description": "Deploy and command services",
   "author": "Jesse Tane <jesse.tane@gmail.com>",
   "dependencies": {
     "cui": "0.0.7",
-    "request": "*",
-    "async": "*"
+    "request": "2.12.0",
+    "async": "0.1.22"
   },
   "bin": {
-    "deployer": "index.js"
+    "spm": "index.js"
   }
 }

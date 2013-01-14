@@ -6,15 +6,16 @@
  */
 
 
-var cui = require("cui")
-var async = require("async")
-var util = require("./lib/util")
-var views = require("./lib/views")
-var Repo = require("./lib/Repo")
-var Service = require("./lib/Service")
-var Machine = require("./lib/Machine")
+var cui = require('cui')
+var async = require('async')
+var util = require('./lib/util')
+var views = require('./lib/views')
+var Repo = require('./lib/Repo')
+var Service = require('./lib/Service')
+var Machine = require('./lib/Machine')
 
-var config = require("./example/services")
+var config = require('./example/services')
+var config = require(process.cwd() + '/deploy.json')
 
 
 cui.push(function (cb) {
@@ -38,24 +39,25 @@ cui.push(function (cb) {
 })
 
 cui.push({
-  title: "status",
-  type: "buttons",
-  properties: [ "service", "status" ],
-  categories: [ "environment", "machine" ],
+  title: 'status',
+  type: 'buttons',
+  properties: [ 'service', 'status' ],
+  categories: [ 'environment', 'machine' ],
   data: function (cb) {
     var ops = []
     var machines = cui.last(1).machines
     for (var m in machines) {
       var machine = new Machine(machines[m])
       ops.push(function (cb) {
-        machine.status(cb)
+        //machine.status(cb)
+        machine.connect()
       })
     }
-    async.parallel(ops, function (err, data) {
-      if (!err) {
-        data = util.flatten(data, 5)
-      }
-      cb(err, data)
-    })
+    // async.parallel(ops, function (err, data) {
+    //   if (!err) {
+    //     data = util.flatten(data, 5)
+    //   }
+    //   cb(err, data)
+    // })
   }
 })
