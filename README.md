@@ -7,12 +7,16 @@
 ```
 
 ## What
-Deploy and command multiple versions of multiple services on multiple hosts in multiple environments.
+A package manager for services.
 
 ## Why
-Because the world needs more deploy tools.
+Services gotta get deployed.
 
 ## How
+```json
+```
+
+## Transports
 * local + directory: rsync
 * local + git: git-push
 * remote + git: git-fetch
@@ -28,6 +32,14 @@ Because the world needs more deploy tools.
 * `spm`
 * `spm deploy`
 * `spm deploy <service>`
+
+```bash
+
+spm deploy repo $REPO $VERSION $ENVIRONMENT $MACHINE $MONIKER $ALIASES $VARS
+spm deploy service $SERVICE
+spm operate 
+
+```
 
 ## License
 MIT

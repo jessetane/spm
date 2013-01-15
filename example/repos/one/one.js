@@ -9,7 +9,7 @@
 var http = require('http')
 var server = http.createServer(function(req, res) {
   console.log(req.headers.host)
-  res.end('hi!')
+  res.end('one')
 })
 server.listen(process.env.PORT)
 console.log(process.env.PORT)
