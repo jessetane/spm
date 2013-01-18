@@ -8,14 +8,18 @@
 
 var cui = require('cui')
 var async = require('async')
-var util = require('./lib/util')
-var views = require('./lib/views')
-var Repo = require('./lib/Repo')
-var Service = require('./lib/Service')
-var Machine = require('./lib/Machine')
+var util = require('../lib/util')
+var views = require('../lib/views')
+var Repo = require('../lib/Repo')
+var Service = require('../lib/Service')
+var Machine = require('../lib/Machine')
 
-var config = null
+var config = require(process.cwd() + '/spm')
 
+cui.push(function (cb) {
+  config = util.inflate(config)
+  cb()
+})
 
 cui.push({
   title: 'repos',
@@ -77,21 +81,15 @@ cui.push({
 
 cui.push({
   type: 'fields',
-  data: 'service aliases [www.domain.tld, test.domain.tld]: '
-})
-
-cui.push({
-  type: 'fields',
   data: 'service variables [KEY1=VAL1, KEY2=VAL2]: '
 })
 
 cui.push(function(cb) {
   var service = new Service({
-    repo: cui.last(7),
-    version: cui.last(6),
-    machines: [ new Machine(cui.last(4)) ],
-    name: cui.last(3),
-    aliases: cui.last(2),
+    repo: cui.last(6),
+    version: cui.last(5),
+    machines: [ new Machine(cui.last(3)) ],
+    name: cui.last(2),
     variables: cui.last(1)
   })
   cui.results.push(service)
@@ -115,7 +113,7 @@ cui.push(function(cb) {
 cui.push(function(cb) {
   var service = cui.last(1)
   service.deploy(function(err, data) {
-    if (!err) console.log('deploy succeeded')
+    if (!err) console.log(service.name + ' deployed successfully to ' + service.machines[0].address)
     cb(err)
   })
 })

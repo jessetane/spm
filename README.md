@@ -48,3 +48,23 @@ MIT
 Right now, the tools exec out to the system's ssh and git or rsync, could this be done in pure javascript?  
 * https://github.com/mscdex/ssh2
 * https://github.com/hij1nx/git-stream
+
+
+
+// - deploy
+// move code and variables to lib/service/version on all machines in given environment 
+// run post-deploy hook
+
+// - withdraw
+// run pre-withdraw hook
+// destroy code in lib/service/version
+
+// - inspect
+// intersects services.json & machines.json to show the status of an environment
+
+// - connect
+// pick from a list of machines
+// pick from a list of users
+// ssh in
+
+
