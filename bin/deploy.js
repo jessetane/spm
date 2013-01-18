@@ -5,97 +5,82 @@
  *
  */
 
-
 var cui = require('cui')
-var async = require('async')
 var util = require('../lib/util')
-var views = require('../lib/views')
-var Repo = require('../lib/Repo')
-var Service = require('../lib/Service')
-var Machine = require('../lib/Machine')
-
+var Service = require('../lib/service')
 var config = require(process.cwd() + '/spm')
+var service = null
 
 cui.push(function (cb) {
-  config = util.inflate(config)
+  util.inflate(config)
+  //console.log(JSON.stringify(config, true, 2))  // debug
+  if (Object.keys(config.services).length === 0) {
+    throw new Error('to deploy you must define at least one service')
+  }
   cb()
 })
 
 cui.push({
-  title: 'repos',
+  title: 'services',
   type: 'buttons',
-  data: function(cb) {
-    config = require(process.cwd() + '/deploy.json')
-    async.parallel([
-      function(cb) { Repo.configure(config, cb) },
-      function(cb) { Machine.configure(config, cb) }
-    ], function(err) {
-      cb(err, config.repos)
-    })
-  }
+  data: config.services
 })
 
-cui.push(function(cb) {
-  var repo = cui.last(1)
-  if (repo.type.indexOf('git') > -1) {
-    cui.splice(new views.GitVersions(repo))
-  } else {
-    cui.splice(new views.RawVersions(repo))
-    cui.splice(function(cb) {
-      var answer = cui.last(1)
-      if (answer === undefined) {
-        cui.results.splice(-1, 1, 'HEAD')
+cui.push(function (cb) {
+  service = new Service(cui.last(1))
+  if (!service.version) {
+    cui.splice({
+      title: 'versions',
+      type: 'buttons',
+      data: function(cb) {
+        service.repo.versions(cb)
       }
+    })
+    cui.splice(function (cb) {
+      service.version = cui.last(1)
       cb()
     })
   }
   cb()
 })
 
-cui.push(function(cb) {
-  var environments = config.environments
-  var keys = Object.keys(environments)
-  if (keys.length > 1) {
-    cui.splice(new views.Environments(environments))
+cui.push(function (cb) {
+  if (!service.environment) {
+    cui.splice({
+      title: 'environments',
+      type: 'buttons',
+      data: config.environments
+    })
+    cui.splice(function (cb) {
+      service.environment = cui.last(1)
+      cb()
+    })
   } else {
-    cui.results.push(environments[keys[0]])
+    service.environment = config.environments[service.environment]
+  }
+  cb()
+})
+
+cui.push(function (cb) {
+  var machines = service.environment.machines
+  service.machines = []
+  for (var m in machines) {
+    var machine = machines[m]
+    if (machine.variables) {
+      service.variables = util._extend(machine.variables, service.variables)
+    }
+    service.machines.push(machine)
   }
   cb()
 })
 
 cui.push(function(cb) {
-  var machines = cui.last(1).machines
-  var keys = Object.keys(machines)
-  if (keys.length > 1) {
-    cui.splice(new views.Machines(machines))
-  } else {
-    cui.results.push(machines[keys[0]])
-  }
-  cb()
-})
-
-cui.push({
-  type: 'fields',
-  data: 'service name [domain.tld]: '
-})
-
-cui.push({
-  type: 'fields',
-  data: 'service variables [KEY1=VAL1, KEY2=VAL2]: '
-})
-
-cui.push(function(cb) {
-  var service = new Service({
-    repo: cui.last(6),
-    version: cui.last(5),
-    machines: [ new Machine(cui.last(3)) ],
-    name: cui.last(2),
-    variables: cui.last(1)
-  })
-  cui.results.push(service)
   service.isDeployed(function(err, data) {
     if (!err && data) {
-      cui.splice(new views.Confirmation(service))
+      cui.splice({
+        type: 'fields',
+        data: service.name + '@' + service.version + ' is already deployed - do you want to overwrite? [Y/n]: '
+      })
       cui.splice(function(cb) {
         var err = null
         var answer = cui.last(1)
@@ -111,9 +96,10 @@ cui.push(function(cb) {
 })
 
 cui.push(function(cb) {
-  var service = cui.last(1)
   service.deploy(function(err, data) {
-    if (!err) console.log(service.name + ' deployed successfully to ' + service.machines[0].address)
+    if (!err) {
+      console.log(service.name + ' deployed successfully to ' + service.machines[0].address)
+    }
     cb(err)
   })
 })

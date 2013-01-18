@@ -1,28 +1,35 @@
 #!/usr/bin/env node
 
 /*
- *  operate.js
+ *  connect.js
  *
  */
 
 
 var cui = require('cui')
 var async = require('async')
-var util = require('./lib/util')
-var views = require('./lib/views')
-var Repo = require('./lib/Repo')
-var Service = require('./lib/Service')
-var Machine = require('./lib/Machine')
+var util = require('../lib/util')
+var config = require(process.cwd() + '/spm')
 
-var config = require(process.cwd() + '/deploy.json')
-
-cui.push(function(cb) {
-  Machine.configure(config, cb)
+cui.push(function (cb) {
+  util.inflate(config)  
+  //console.log(JSON.stringify(config, true, 2))  // debug
+  if (Object.keys(config.machines).length === 0) {
+    throw new Error('to connect you must define at least one machine')
+  }
+  cb()
 })
 
 cui.push(function(cb) {
-  var envCount = Object.keys(config.environments).length  
-  cui.splice(new views.Machines(config.machines, envCount))
+  var view = {
+    title: 'machines',
+    type: 'buttons',
+    data: config.machines
+  }
+  if (Object.keys(config.environments).length > 0) {
+    view.categories = [ 'environment' ]
+  }
+  cui.splice(view)
   cb()
 })
 

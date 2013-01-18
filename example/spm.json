@@ -13,6 +13,9 @@
           "abc.two.com"
         ]
       }
+    },
+    "multiparser": {
+      "repo": "/Users/jessetane/Dropbox/Jesse/Projects/github/multiparser"
     }
   },
   "environments": {
@@ -21,8 +24,14 @@
         "NODE_ENV": "development"
       },
       "users": {
-	      "server": "~/.ssh/id_rsa",
-	      "ubuntu": "~/.ssh/id_rsa"
+	      "server": "/Users/jessetane/.ssh/id_rsa",
+	      "ubuntu": "/Users/jessetane/.ssh/id_rsa"
+	    }
+    },
+    "staging": {
+      "users": {
+	      "server": "/Users/jessetane/.ssh/id_rsa",
+	      "ubuntu": "/Users/jessetane/.ssh/id_rsa"
 	    }
     }
   },
@@ -39,7 +48,7 @@
       "address": "ec2-184-169-241-57.us-west-1.compute.amazonaws.com",
       "environment": "production",
 	    "users": {
-	      "server": "~/.ssh/id_rsa",
+	      "server": "/Users/jessetane/.ssh/id_rsa",
 	      "ubuntu": "/Users/jessetane/.ssh/twosixheave-keypair-nca"
 	    }
     }
