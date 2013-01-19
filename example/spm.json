@@ -12,6 +12,12 @@
           "www.two.com",
           "abc.two.com"
         ]
+      },
+      "hooks": {
+        "pre-deploy": "bin/stop",
+        "post-deploy": "bin/start",
+        "pre-withdraw": "bin/stop",
+        "status": "echo 'bang'"
       }
     },
     "multiparser": {

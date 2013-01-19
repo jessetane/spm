@@ -96,9 +96,10 @@ cui.push(function(cb) {
 })
 
 cui.push(function(cb) {
-  service.deploy(function(err, data) {
+  service.deploy(function(err) {
+    //console.log(service._log)
     if (!err) {
-      console.log(service.name + ' deployed successfully to ' + service.machines[0].address)
+      console.log(service.name + ' deployed successfully to ' + service.machines.map(function(m) { return m.address }).join(' & '))
     }
     cb(err)
   })

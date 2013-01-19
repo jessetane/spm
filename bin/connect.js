@@ -5,11 +5,12 @@
  *
  */
 
-
 var cui = require('cui')
 var async = require('async')
 var util = require('../lib/util')
 var config = require(process.cwd() + '/spm')
+var machine = null
+var user = null
 
 cui.push(function (cb) {
   util.inflate(config)  
@@ -34,6 +35,26 @@ cui.push(function(cb) {
 })
 
 cui.push(function(cb) {
-  var machine = cui.last(1)
-  machine.connect()
+  machine = cui.last(1)
+  var users = Object.keys(machine.users)
+  if (users.length > 0) {
+    cui.splice({
+      title: 'users',
+      type: 'buttons',
+      data: users
+    })
+  }
+  cb()
+})
+
+cui.push(function(cb) {
+  if (cui.results.length > 1) {
+    var name = cui.last(1)
+    user = {
+      name: name,
+      key: machine.users[name]
+    }
+  }
+  machine.connect(user)
+  cb()
 })

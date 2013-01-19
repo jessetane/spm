@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
- *  withdraw.js
+ *  command.js
  *
  */
 
@@ -51,19 +51,22 @@ cui.push(function(cb) {
   })
 })
 
+cui.push({
+  type: 'fields',
+  data: 'type a command: '
+})
+
 cui.push(function(cb) {
-  var view = cui.last(1)
+  var view = cui.last(2)
   var parts = view.service.split('@')
   var name = parts[0]
   var version = parts[1]
   var service = new Service(config.services[name])
   service.version = version
   service.machines = [ config.machines[view.machine] ]
-  service.withdraw(function(err) {
-    //console.log(service._log)
-    if (!err) {
-      console.log(service.name + ' withdrawn successfully from ' + service.machines[0].address)
-    }
-    cb(err)
+  service.command(cui.last(1), function(err, results) {
+    if (results[0][0]) console.log('stdout:', results[0][0])
+    if (results[0][1]) console.log('stderr:', results[0][1])
+    cb()
   })
 })

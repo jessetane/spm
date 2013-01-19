@@ -13,7 +13,7 @@ cui.push({
   data: [
     'deploy',
     'withdraw',
-    'operate',
+    'command',
     'connect'
   ]
 })
