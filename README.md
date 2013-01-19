@@ -10,13 +10,9 @@
 A package manager for services.
 
 ## Why
-Services gotta get deployed.
+Just felt like reinventing some wheels.
 
 ## How
-```json
-```
-
-## Transports
 * local + directory: rsync
 * local + git: git-push
 * remote + git: git-fetch
@@ -27,19 +23,12 @@ Services gotta get deployed.
 `npm install -g`
 
 ## Usage
-1) Make a deploy.json file in a directory that describes your repos, services, machines & environments.  
-2) Type a command like the ones below:  
-* `spm`
-* `spm deploy`
-* `spm deploy <service>`
-
-```bash
-
-spm deploy repo $REPO $VERSION $ENVIRONMENT $MACHINE $MONIKER $ALIASES $VARS
-spm deploy service $SERVICE
-spm operate 
-
-```
+1) Make a spm.json file in a directory that describes your repos, services, machines & environments.  
+2) Type one of these commands:  
+* spm deploy
+* spm withdraw
+* spm command
+* spm connect
 
 ## License
 MIT
@@ -48,23 +37,3 @@ MIT
 Right now, the tools exec out to the system's ssh and git or rsync, could this be done in pure javascript?  
 * https://github.com/mscdex/ssh2
 * https://github.com/hij1nx/git-stream
-
-
-
-// - deploy
-// move code and variables to lib/service/version on all machines in given environment 
-// run post-deploy hook
-
-// - withdraw
-// run pre-withdraw hook
-// destroy code in lib/service/version
-
-// - inspect
-// intersects services.json & machines.json to show the status of an environment
-
-// - connect
-// pick from a list of machines
-// pick from a list of users
-// ssh in
-
-
