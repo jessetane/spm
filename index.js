@@ -5,7 +5,6 @@
  *
  */
 
-
 var cui = require('cui')
 
 cui.push({
@@ -13,13 +12,14 @@ cui.push({
   type: 'buttons',
   data: [
     'deploy',
-    'inspect',
-    'operate'
+    'withdraw',
+    'command',
+    'connect'
   ]
 })
 
 cui.push(function(cb) {
   var command = cui.last(1)
-  require('./' + command)
+  require('./bin/' + command)
   cb()
 })

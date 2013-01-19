@@ -10,13 +10,9 @@
 A package manager for services.
 
 ## Why
-Services gotta get deployed.
+Just felt like reinventing some wheels.
 
 ## How
-```json
-```
-
-## Transports
 * local + directory: rsync
 * local + git: git-push
 * remote + git: git-fetch
@@ -27,19 +23,12 @@ Services gotta get deployed.
 `npm install -g`
 
 ## Usage
-1) Make a deploy.json file in a directory that describes your repos, services, machines & environments.  
-2) Type a command like the ones below:  
-* `spm`
-* `spm deploy`
-* `spm deploy <service>`
-
-```bash
-
-spm deploy repo $REPO $VERSION $ENVIRONMENT $MACHINE $MONIKER $ALIASES $VARS
-spm deploy service $SERVICE
-spm operate 
-
-```
+1) Make a spm.json file in a directory that describes your repos, services, machines & environments.  
+2) Type one of these commands:  
+* spm deploy
+* spm withdraw
+* spm command
+* spm connect
 
 ## License
 MIT

@@ -1,0 +1,14 @@
+#
+# start
+#
+
+cd "$(dirname "$0")"/..
+
+# bail if already running
+[[ -e mpid || -e pid ]] && echo "the service appears to already be running" > /dev/stderr && exit 1
+
+# start the service
+mon -d -p pid -m mpid -l log "node one.js"
+
+# if it started, let em know
+[ $? == 0 ] && echo "service started successfully"
