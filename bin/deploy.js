@@ -45,7 +45,12 @@ cui.push(function (cb) {
 })
 
 cui.push(function (cb) {
-  if (!service.environment) {
+  var envs = Object.keys(config.environments)
+  if (service.environment) {
+    service.environment = config.environments[service.environment]
+  } else if (envs.length === 1) {
+    service.environment = config.environments[envs[0]]
+  } else {
     cui.splice({
       title: 'environments',
       type: 'buttons',
@@ -55,8 +60,6 @@ cui.push(function (cb) {
       service.environment = cui.last(1)
       cb()
     })
-  } else {
-    service.environment = config.environments[service.environment]
   }
   cb()
 })
