@@ -1,0 +1,21 @@
+{
+  "services": {
+    "one.com": {
+      "repo": "repos/one",
+      "variables": {
+        "PORT": 8080,
+        "MESSAGE": "hello world"
+      }
+    }
+  },
+  "machines": {
+    "ubuntu-vm0": {
+      "address": "192.168.50.10",
+      "environment": "development",
+      "users": {
+        "server": "",
+        "ubuntu": ""
+      }
+    }
+  }
+}

@@ -9,10 +9,17 @@ var cui = require('cui')
 var async = require('async')
 var util = require('../lib/util')
 var Service = require('../lib/service')
-var config = require(process.cwd() + '/spm')
+
+var config = cui.cache && cui.cache.config
+if (!config) {
+  cui.push(util.loadConfig)
+  cui.push(function(cb) {
+    config = cui.cache.config
+    cb()
+  })
+}
 
 cui.push(function (cb) {
-  util.inflate(config)
   if (Object.keys(config.services).length === 0) {
     throw new Error('to withdraw you must define at least one service')
   } else if (Object.keys(config.machines).length === 0) {
@@ -38,7 +45,7 @@ cui.push(function(cb) {
     var err = null
     if (all.length) {
       cui.splice({
-        title: 'ecosystem',
+        title: 'environments',
         type: 'buttons',
         categories: [ 'environment', 'machine' ],
         properties: [ 'service', 'status' ],

@@ -1,3 +1,0 @@
-export NODE_ENV=development
-export SERVICE=one.com
-export VERSION=HEAD

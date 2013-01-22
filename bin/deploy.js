@@ -8,12 +8,19 @@
 var cui = require('cui')
 var util = require('../lib/util')
 var Service = require('../lib/service')
-var config = require(process.cwd() + '/spm')
+
+var config = cui.cache && cui.cache.config
 var service = null
 
+if (!config) {
+  cui.push(util.loadConfig)
+  cui.push(function(cb) {
+    config = cui.cache.config
+    cb()
+  })
+}
+
 cui.push(function (cb) {
-  util.inflate(config)
-  //console.log(JSON.stringify(config, true, 2))  // debug
   if (Object.keys(config.services).length === 0) {
     throw new Error('to deploy you must define at least one service')
   }
