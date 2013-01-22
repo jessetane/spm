@@ -8,13 +8,20 @@
 var cui = require('cui')
 var async = require('async')
 var util = require('../lib/util')
-var config = require(process.cwd() + '/spm')
-var machine = null
+
+var config = cui.cache && cui.cache.config
 var user = null
+var machine = null
+
+if (!config) {
+  cui.push(util.loadConfig)
+  cui.push(function(cb) {
+    config = cui.cache.config
+    cb()
+  })
+}
 
 cui.push(function (cb) {
-  util.inflate(config)  
-  //console.log(JSON.stringify(config, true, 2))  // debug
   if (Object.keys(config.machines).length === 0) {
     throw new Error('to connect you must define at least one machine')
   }

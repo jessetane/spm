@@ -6,6 +6,9 @@
  */
 
 var cui = require('cui')
+var util = require('./lib/util')
+
+cui.push(util.loadConfig)
 
 cui.push({
   title: 'action',

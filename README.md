@@ -23,12 +23,29 @@ Just felt like reinventing some wheels.
 `npm install -g`
 
 ## Usage
-1) Make a spm.json file in a directory that describes your repos, services, machines & environments.  
-2) Type one of these commands:  
-* spm deploy
-* spm withdraw
-* spm command
-* spm connect
+1) Make an config file written in JSON or JavaScript that describes your services & machines:  
+```json
+{
+  "services": {
+    "one.com": {
+      "repo": "path/to/repo"
+    },
+		"db.one.com": {
+			"repo": "https://github.com/yourname/db"
+		}
+  },
+  "machines": {
+    "server-friendly-name": {
+      "address": "domain-name-or-ip-address",
+      "users": {
+        "name": "/path/to/ssh-key",
+      }
+    }
+  }
+}
+```
+
+2) cd into the directory holding your config file and type `spm`
 
 ## License
 MIT
