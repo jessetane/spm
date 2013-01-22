@@ -26,22 +26,22 @@ Just felt like reinventing some wheels.
 1) Make an config file written in JSON or JavaScript that describes your services & machines:  
 ```json
 {
-  "services": {
-    "one.com": {
-      "repo": "path/to/repo"
-    },
+	"services": {
+		"one.com": {
+			"repo": "path/to/repo"
+		},
 		"db.one.com": {
 			"repo": "https://github.com/yourname/db"
 		}
-  },
-  "machines": {
-    "server-friendly-name": {
-      "address": "domain-name-or-ip-address",
-      "users": {
-        "name": "/path/to/ssh-key",
-      }
-    }
-  }
+	},
+	"machines": {
+		"server-friendly-name": {
+			"address": "domain-name-or-ip-address",
+			"users": {
+				"name": "/path/to/ssh-key",
+			}
+		}
+	}
 }
 ```
 
