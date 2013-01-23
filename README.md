@@ -17,11 +17,6 @@ Just felt like reinventing some wheels.
 * local + git: git-push
 * remote + git: git-fetch
 
-## Installation
-`git clone https://github.com/jessetane/spm.git`  
-`cd spm`  
-`npm install -g`
-
 ## Usage
 1) Make an config file written in JSON or JavaScript that describes your services & machines:  
 ```json
@@ -46,6 +41,13 @@ Just felt like reinventing some wheels.
 ```
 
 2) cd into the directory holding your config file and type `spm`
+
+## Installation
+```bash
+git clone https://github.com/jessetane/spm.git
+cd spm
+npm install -g
+```
 
 ## License
 MIT
