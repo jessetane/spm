@@ -3,8 +3,12 @@
     "one.com": {
       "repo": "repos/one",
       "variables": {
+        "RUN": "node one.js",
         "PORT": 8080,
         "MESSAGE": "hello world"
+      },
+      "hooks": {
+        "status": "bin/status"
       }
     }
   },

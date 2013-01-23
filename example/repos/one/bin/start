@@ -4,11 +4,25 @@
 
 cd "$(dirname "$0")"/..
 
-# bail if already running
-[[ -e mpid || -e pid ]] && echo "the service appears to already be running" > /dev/stderr && exit 1
+# environment
+. bin/profile
 
-# start the service
-mon -d -p pid -m mpid -l log "node one.js"
+# require $NAME and $RUN
+[ -z "$NAME" ] && echo '$NAME is not defined' > /dev/stderr && exit 1
+[ -z "$RUN" ] && echo '$RUN is not defined' > /dev/stderr && exit 1
 
-# if it started, let em know
-[ $? == 0 ] && echo "service started successfully"
+# bail if running
+[[ -e mpid || -e pid ]] && echo "$NAME is already running" > /dev/stderr && exit 1
+
+# log date
+echo -e "\n"$(date)" starting up..." >> log
+
+# start the service - your profile must supply $RUN!
+mon -d -p pid -m mpid -l log "$RUN"
+
+# chill for half a sec
+sleep 0.5
+
+# are we up?
+bin/status > /dev/null
+[ $? == 0 ] && echo "$NAME started successfully" || (echo "$NAME failed to start" > /dev/stderr && exit 1)

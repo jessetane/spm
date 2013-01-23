@@ -12,4 +12,4 @@ var server = http.createServer(function(req, res) {
   res.end(process.env.MESSAGE)
 })
 server.listen(process.env.PORT)
-console.log(process.env.PORT)
+console.log(process.env.NAME + '@' + process.env.VERSION + ' listening on ' + process.env.PORT)

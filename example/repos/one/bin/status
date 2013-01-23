@@ -1,0 +1,19 @@
+#
+# status
+#
+
+cd "$(dirname "$0")"/..
+
+# environment
+. bin/profile
+
+# if we have mpid and pid files, ask mon what's up
+if [[ -e mpid && -e pid ]]
+then
+  echo $(mon --pidfile pid --status)
+else
+  
+  # otherwise just assume the service is stopped
+  echo "stopped"
+  exit 1
+fi

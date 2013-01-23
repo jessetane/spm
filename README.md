@@ -51,6 +51,9 @@ Just felt like reinventing some wheels.
 MIT
 
 ## TODO
+* Tests
+* A pretty print function for reporting command logs
+
 Right now, the tools exec out to the system's ssh and git or rsync, could this be done in pure javascript?  
 * https://github.com/mscdex/ssh2
 * https://github.com/hij1nx/git-stream

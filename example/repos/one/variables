@@ -1,3 +1,5 @@
-export NODE_ENV=development
-export NAME=one.com
-export VERSION=HEAD
+export RUN="node one.js"
+export PORT="8080"
+export MESSAGE="hello world"
+export NAME="one.com"
+export VERSION="HEAD"

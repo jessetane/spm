@@ -2,10 +2,10 @@
 # install
 #
 
-
 cd "$(dirname "$0")"/..
 
-source ./environment
-ENV_PATH=$(pwd)
-echo -e env ENVIRONMENT="$ENV_PATH"/environment > ~/.init/"$SERVICE"@"$VERSION".conf
-cat bin/upstart.conf >> ~/.init/"$SERVICE"@"$VERSION".conf
+# environment
+. bin/profile
+
+# get deps
+npm install
