@@ -1,0 +1,28 @@
+#
+# start
+#
+
+# cd into parent dir
+cd "$(dirname "$0")" && cd $(pwd)/..
+
+# environment
+. variables
+
+# require $NAME and $RUN
+[ -z "$NAME" ] && echo '$NAME is not defined' >&2 && exit 1
+[ -z "$RUN" ] && echo '$RUN is not defined' >&2 && exit 1
+
+# bail if running
+ctrls/status > /dev/null && echo "$NAME is already running" >&2 && exit 1
+
+# log date
+echo -e "\n"$(date)" starting up..." >> log
+
+# start the service
+mon -d -p pid -m mpid -l log "$RUN"
+
+# chill for half a sec
+sleep 0.5
+
+# are we up?
+ctrls/status > /dev/null && echo "$NAME started successfully" || (echo "$NAME failed to start" >&2 && exit 1)

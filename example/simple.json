@@ -8,17 +8,18 @@
         "MESSAGE": "hello world"
       },
       "hooks": {
-        "status": "bin/status"
+        "post-deploy": "ctrls/stop; ctrls/install; ctrls/start",
+        "pre-withdraw": "ctrls/stop",
+        "status": "ctrls/status"
       }
     }
   },
   "machines": {
-    "ubuntu-vm0": {
-      "address": "192.168.50.10",
+    "Trusty-Steve-V": {
+      "address": "127.0.0.1",
       "environment": "development",
       "users": {
-        "server": "",
-        "ubuntu": ""
+        "jessetane": null
       }
     }
   }

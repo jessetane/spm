@@ -1,10 +1,7 @@
-#!/usr/bin/env node
-
 /*
- *  one.js
+ *  one.js - a nodejs http server
  *
  */
-
 
 var http = require('http')
 var server = http.createServer(function(req, res) {

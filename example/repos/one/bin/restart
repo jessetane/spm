@@ -1,8 +1,0 @@
-#
-#	restart
-#
-
-cd "$(dirname "$0")"/..
-
-bin/stop
-bin/start

@@ -1,0 +1,17 @@
+#
+# install
+#
+
+# cd into parent dir
+cd "$(dirname "$0")" && cd $(pwd)/..
+
+# environment
+. variables
+
+# get your deps?
+npm install
+# pip install
+# bundle install
+
+# start at boot?
+# ln -s $(pwd)/ctrls/start ~/init/$NAME
